@@ -1,0 +1,6 @@
+flask
+random
+asyncio
+aioflask 
+telethon
+gunicorn
