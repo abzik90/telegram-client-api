@@ -10,7 +10,7 @@ from telethon import functions, types
 api_id = config.app_id
 api_hash = config.app_hash
 
-client = TelegramClient('session_name', api_id, api_hash,)
+client = TelegramClient('another_session_name', api_id, api_hash,)
 # client.start()
 
 async def connect_telethon():
@@ -87,7 +87,7 @@ def connect_to():
         return "{'log_status':'something is wrong'}"
     return "{'log_status':'seems like nothing wrong'}"
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 # ?phone_number=+77476722677&message=Hello%20from%20flask
