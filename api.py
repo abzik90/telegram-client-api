@@ -65,13 +65,14 @@ def home():
     phone_number = request.args['phone_number']
     message = request.args['message']
     # loop.run_until_complete(send_message(phone_number, message))
-    loop.run_until_complete(send_message(phone_number, message))
-
+    if not loop.run_until_complete(send_message(phone_number, message)):
+        return "{'success':false}"
     return "{'success':true}"
 @app.route('/auth',methods = ['GET'])
 def auth():
     auth_code = request.args['auth_code']
-    loop.run_until_complete(client_auth(auth_code))
+    if not loop.run_until_complete(client_auth(auth_code)):
+        return "{'log_status':'something is wrong'}"
     return "{'log_status':'seems like nothing wrong'}"
 
 # if __name__ == '__main__':
