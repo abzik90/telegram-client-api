@@ -80,12 +80,12 @@ def auth():
     auth_code = request.args['auth_code']
     if not loop.run_until_complete(client_auth(auth_code)):
         return "{'log_status':'something is wrong'}"
-    return "{'log_status':'seems like nothing wrong'}"
+    return "{'log_status':'ok'}"
 @app.route('/connect',methods = ['GET'])
 def connect_to():
     if not loop.run_until_complete(connect_telethon()):
         return "{'log_status':'something is wrong'}"
-    return "{'log_status':'seems like nothing wrong'}"
+    return "{'log_status':'ok'}"
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
