@@ -10,7 +10,7 @@ from telethon import functions, types
 api_id = config.app_id
 api_hash = config.app_hash
 
-client = TelegramClient('session_name', api_id, api_hash)
+# client = TelegramClient('session_name', api_id, api_hash)
 # client.start()
 
 async def connect_telethon():
