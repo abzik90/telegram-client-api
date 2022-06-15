@@ -10,12 +10,12 @@ from telethon import functions, types
 api_id = config.app_id
 api_hash = config.app_hash
 
-# client = TelegramClient('session_name', api_id, api_hash)
+client = TelegramClient('session_name', api_id, api_hash)
+client.connect()
 # client.start()
 
 async def connect_telethon():
     global client
-    await client.connect()
     try:
         if not await client.is_user_authorized():
             await client.send_code_request(config.default_phone)
@@ -32,7 +32,6 @@ app = flask.Flask(__name__)
 
 async def client_auth(auth_code):
     global client
-    await client.connect()
     myself = await client.sign_in(config.default_phone, auth_code)
 
 async def get_contact(phone_num):
