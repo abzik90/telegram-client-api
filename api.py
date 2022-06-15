@@ -32,6 +32,7 @@ app = flask.Flask(__name__)
 
 async def client_auth(auth_code):
     global client
+    await client.connect()
     myself = await client.sign_in(config.default_phone, auth_code)
 
 async def get_contact(phone_num):
