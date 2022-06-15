@@ -15,8 +15,8 @@ client = TelegramClient('session_name', api_id, api_hash,)
 
 async def connect_telethon():
     global client
+    await client.connect()
     try:
-        await client.connect()
         if not await client.is_user_authorized():
             await client.send_code_request(config.default_phone)
         else:
