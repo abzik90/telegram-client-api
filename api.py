@@ -13,6 +13,8 @@ api_hash = config.app_hash
 client = TelegramClient('session_name', api_id, api_hash)
 client.connect()
 # client.start()
+loop = asyncio.get_event_loop()
+app = flask.Flask(__name__)
 
 async def connect_telethon():
     global client
@@ -27,43 +29,43 @@ async def connect_telethon():
         print(e)
         return False
 
-loop = asyncio.get_event_loop()
-app = flask.Flask(__name__)
-
 async def client_auth(auth_code):
     global client
     myself = await client.sign_in(config.default_phone, auth_code)
 
 async def get_contact(phone_num):
+    global client
     try:
         contact = await client.get_entity(phone_num)
         print("get_contact fired")
         return contact
-    except:
+    except Exception as e:
+        print(e)
         return False
 
-def save_contact(phone_num):
+async def save_contact(phone_num):
+    global client
     try:
-        with TelegramClient("Telethon", api_id, api_hash) as client:
-            result = client(functions.contacts.ImportContactsRequest(
-                contacts=[types.InputPhoneContact(
-                    client_id=random.randrange(-2**63, 2**63),
-                    phone=phone_num,
-                    first_name=phone_num,
-                    last_name=''
-                )]
-            ))
-            return True
+        result = await client(functions.contacts.ImportContactsRequest(
+            contacts=[types.InputPhoneContact(
+                client_id=random.randrange(-2**63, 2**63),
+                phone=phone_num,
+                first_name=phone_num,
+                last_name=''
+            )]
+        ))
+        return True
     except:
-            return False
+        return False
         # return True
 async def send_message(phone_num, message2send):
     entity=await get_contact(phone_num)
+    print(f"entity:{entity}")
     if entity:
         await client.send_message(entity=entity,message=message2send)
         return True
-    elif save_contact(phone_num):
-        await send_message(phone_num, message2send)
+    elif await save_contact(phone_num):
+        return await send_message(phone_num, message2send)
     return False
 
 
@@ -87,7 +89,7 @@ def connect_to():
         return "{'log_status':'something is wrong'}"
     return "{'log_status':'ok'}"
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 # ?phone_number=+77476722677&message=Hello%20from%20flask
