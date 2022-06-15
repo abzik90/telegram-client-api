@@ -15,9 +15,9 @@ client = TelegramClient('session_name', api_id, api_hash,)
 try:
     client.connect()
     if not client.is_user_authorized():
-            client.send_code_request(config.default_phone)
+        client.send_code_request(config.default_phone)
     else:
-        print("successfully  logged in...")
+        print("successfully logged in...")
 except:
     print("Unable to connnect to Telethon...")
 
