@@ -11,10 +11,21 @@ api_id = config.app_id
 api_hash = config.app_hash
 
 client = TelegramClient('session_name', api_id, api_hash,)
-client.start()
+# client.start()
+try:
+    client.connect()
+    if not client.is_user_authorized():
+            client.send_code_request(config.default_phone)
+    else:
+        print("successfully  logged in...")
+except:
+    print("Unable to connnect to Telethon...")
 
 loop = asyncio.get_event_loop()
 app = flask.Flask(__name__)
+
+async def client_auth(auth_code):
+    myself = await client.sign_in(config.default_phone, auth_code)
 
 async def get_contact(phone_num):
     try:
@@ -57,7 +68,13 @@ def home():
     loop.run_until_complete(send_message(phone_number, message))
 
     return "{'success':true}"
+@app.route('/auth',methods = ['GET'])
+def auth():
+    auth_code = request.args['auth_code']
+    loop.run_until_complete(client_auth(auth_code))
+    return "{'log_status':'seems like nothing wrong'}"
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
 # ?phone_number=+77476722677&message=Hello%20from%20flask
