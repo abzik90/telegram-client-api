@@ -31,6 +31,7 @@ loop = asyncio.get_event_loop()
 app = flask.Flask(__name__)
 
 async def client_auth(auth_code):
+    global client
     myself = await client.sign_in(config.default_phone, auth_code)
 
 async def get_contact(phone_num):
